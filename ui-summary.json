@@ -1,11 +1,11 @@
 {
   "title": "玄関受け渡し棚",
   "archetype": "tray_sort",
-  "interaction_model": "sort_items_into_take_or_leave_trays",
-  "primary_layout": "desk_items_with_checkout_trays",
-  "result_presentation_style": "take_home_vs_leave_trays",
-  "palette_motif": "ワークデスクサンド",
-  "main_cta": "退勤前の机で試す",
-  "intro_variant": "desk_checkout",
-  "ui_variant": "desk"
+  "interaction_model": "stage_parcels_into_pickup_shelf",
+  "primary_layout": "doorstep_shelf_with_missing_tags",
+  "result_presentation_style": "time_ordered_parcel_shelf",
+  "palette_motif": "玄関スレート",
+  "main_cta": "集荷前の玄関で試す",
+  "intro_variant": "doorstep_shelf",
+  "ui_variant": "pickup"
 }

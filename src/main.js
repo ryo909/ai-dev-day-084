@@ -1,5 +1,5 @@
 import './style.css';
-const PROFILE = {"day":"Day084","title":"Doorstep Pickup Shelf","display_name_ja":"玄関受け渡し棚","one_sentence":"宅配集荷や手渡しの荷物を、玄関に置く順番と不足物で並べるツール","purpose_line_ja":"玄関で渡す荷物を並べるツールです。","use_case_line_ja":"集荷や手渡しの前夜に使います。","how_it_works_line_ja":"荷物と時刻を入れると、玄関棚が出ます。","core_action":"stage_pickup","family":"doorstep_pickup_staging","mechanic":"tray_sort","input_style":"return_items","output_style":"checkout_trays","output_label":"ここを見ればOKです","audience_promise":"渡す直前の開封確認を減らせる。","publish_hook":"荷物ごとの相手、時刻、不足物を入れると、玄関の棚に置く順と赤い抜けが出る。","engine":"brief_driven","interaction_archetype":"tray_sort","page_archetype":"parcel_box","ui_variant":"desk","intro_variant":"desk_checkout","interaction_model":"sort_items_into_take_or_leave_trays","primary_layout":"desk_items_with_checkout_trays","result_presentation_style":"take_home_vs_leave_trays","palette_motif":"ワークデスクサンド","main_cta":"退勤前の机で試す","input_panel_title":"持ち帰る / 置くを分ける","sample_panel_title":"退勤前の机で試す","guide_panel_title":"持ち帰りの見どころ","hero_panel_label":"今夜持つ物","output_shape":"parcel_box","state_model":"tray_sort_state","core_loop":"return_items -> tray_sort -> checkout_trays","component_pack":"parcel_box+checkout_trays","scaffold_id":"brief_canvas","single_shot_text_generator":false};
+const PROFILE = {"day":"Day084","title":"Doorstep Pickup Shelf","display_name_ja":"玄関受け渡し棚","one_sentence":"宅配集荷や手渡しの荷物を、玄関に置く順番と不足物で並べるツール","purpose_line_ja":"玄関で渡す荷物を並べるツールです。","use_case_line_ja":"集荷や手渡しの前夜に使います。","how_it_works_line_ja":"荷物と時刻を入れると、玄関棚が出ます。","core_action":"stage_pickup","family":"doorstep_pickup_staging","mechanic":"tray_sort","input_style":"return_items","output_style":"checkout_trays","output_label":"ここを見ればOKです","audience_promise":"渡す直前の開封確認を減らせる。","publish_hook":"荷物ごとの相手、時刻、不足物を入れると、玄関の棚に置く順と赤い抜けが出る。","engine":"brief_driven","interaction_archetype":"tray_sort","page_archetype":"parcel_box","ui_variant":"pickup","intro_variant":"doorstep_shelf","interaction_model":"stage_parcels_into_pickup_shelf","primary_layout":"doorstep_shelf_with_missing_tags","result_presentation_style":"time_ordered_parcel_shelf","palette_motif":"玄関スレート","main_cta":"集荷前の玄関で試す","input_panel_title":"荷物と不足物を並べる","sample_panel_title":"集荷前の玄関で試す","guide_panel_title":"不足タグの見どころ","hero_panel_label":"玄関棚","output_shape":"parcel_box","state_model":"tray_sort_state","core_loop":"return_items -> tray_sort -> checkout_trays","component_pack":"parcel_box+checkout_trays","scaffold_id":"brief_canvas","single_shot_text_generator":false};
 const byId = (id) => document.getElementById(id);
 const state = {
   tokens: ['買う', '待つ', '比べる', '今週中'],
@@ -2288,31 +2288,31 @@ function setupTrashDay(root) {
 
 function setupDeskCheckout(root) {
   const presets = {
-    '退勤前': [
-      { name: 'ノートPC', lane: 'take', note: '家でも作業あり' },
-      { name: '充電器', lane: 'take', note: '家で必要' },
-      { name: '文房具', lane: 'leave', note: '机に置く' },
-      { name: '資料ファイル', lane: 'leave', note: '明日また使う' }
+    '集荷前の玄関': [
+      { name: 'フリマ発送箱', lane: 'take', note: '伝票あり / 19時集荷' },
+      { name: '保冷手渡し袋', lane: 'take', note: '保冷剤を追加' },
+      { name: '予備の紙袋', lane: 'leave', note: '必要なら追加' },
+      { name: '未記入の送り状', lane: 'leave', note: 'まだ不足' }
     ]
   };
-  let items = clone(presets['退勤前']);
+  let items = clone(presets['集荷前の玄関']);
 
   root.querySelector('#briefInputZone').innerHTML = '<div class="item-grid" id="deskControls"></div>';
   root.querySelector('#briefResultZone').innerHTML = `
     <div class="request-cards">
-      <div class="request-card" id="deskTake"><strong>持ち帰る</strong></div>
-      <div class="request-card" id="deskLeave"><strong>机に残す</strong></div>
+      <div class="request-card" id="deskTake"><strong>玄関に出す</strong></div>
+      <div class="request-card" id="deskLeave"><strong>不足確認</strong></div>
     </div>
   `;
-  setResultHint('持ち帰る / 机に残すを切り替えると、今夜必要な物だけがまとまります。');
+  setResultHint('玄関へ出す / 不足確認を切り替えると、渡す荷物と足りない物が分かれます。');
 
   function render() {
     byId('deskControls').innerHTML = items.map((item, idx) => `
       <div class="item-card ${item.lane === 'take' ? 'keep' : 'cut'}">
         <div><div class="item-title">${escapeHtml(item.name)}</div><div class="subline">${escapeHtml(item.note)}</div></div>
         <div class="pill-row">
-          <button class="assign-btn" data-desk-idx="${idx}" data-lane="take">持ち帰る</button>
-          <button class="assign-btn" data-desk-idx="${idx}" data-lane="leave">机に置く</button>
+          <button class="assign-btn" data-desk-idx="${idx}" data-lane="take">玄関へ</button>
+          <button class="assign-btn" data-desk-idx="${idx}" data-lane="leave">不足へ</button>
         </div>
       </div>
     `).join('');
@@ -2325,19 +2325,19 @@ function setupDeskCheckout(root) {
     const laneHtml = (lane) => items.filter((item) => item.lane === lane)
       .map((item) => `<div class="overflow-pill"><strong>${escapeHtml(item.name)}</strong><div class="subline">${escapeHtml(item.note)}</div></div>`)
       .join('') || '<div class="empty-state">まだありません。</div>';
-    byId('deskTake').innerHTML = '<strong>持ち帰る</strong>' + laneHtml('take');
-    byId('deskLeave').innerHTML = '<strong>机に残す</strong>' + laneHtml('leave');
+    byId('deskTake').innerHTML = '<strong>玄関に出す</strong>' + laneHtml('take');
+    byId('deskLeave').innerHTML = '<strong>不足確認</strong>' + laneHtml('leave');
     setHeroStat(`${items.filter((item) => item.lane === 'take').length}点`);
     setStatusCards([
-      { label: '持ち帰る', value: `${items.filter((item) => item.lane === 'take').length}点` },
-      { label: '残す', value: `${items.filter((item) => item.lane === 'leave').length}点` },
-      { label: '机上整理', value: '完了前' }
+      { label: '玄関に出す', value: `${items.filter((item) => item.lane === 'take').length}点` },
+      { label: '不足確認', value: `${items.filter((item) => item.lane === 'leave').length}点` },
+      { label: '受け渡し', value: '確認中' }
     ]);
-    setResultLead('今夜必要な物だけがトレイに残るので、全部入れて帰るより軽く終わります。');
+    setResultLead('渡す荷物と不足物が分かれるので、当日に箱を開け直す回数を減らせます。');
   }
 
-  mountPresetButtons([{ label: '退勤前', action: () => { items = clone(presets['退勤前']); render(); } }]);
-  state.helpers.runBriefSample = () => { items = clone(presets['退勤前']); render(); };
+  mountPresetButtons([{ label: '集荷前の玄関', action: () => { items = clone(presets['集荷前の玄関']); render(); } }]);
+  state.helpers.runBriefSample = () => { items = clone(presets['集荷前の玄関']); render(); };
   render();
 }
 
