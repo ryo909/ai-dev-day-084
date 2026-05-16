@@ -1,0 +1,11 @@
+{
+  "title": "玄関受け渡し棚",
+  "archetype": "tray_sort",
+  "interaction_model": "sort_items_into_take_or_leave_trays",
+  "primary_layout": "desk_items_with_checkout_trays",
+  "result_presentation_style": "take_home_vs_leave_trays",
+  "palette_motif": "ワークデスクサンド",
+  "main_cta": "退勤前の机で試す",
+  "intro_variant": "desk_checkout",
+  "ui_variant": "desk"
+}
